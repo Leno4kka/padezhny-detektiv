@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#30218b">
+  <meta name="description" content="Падежный детектив — мини-тренажёр по русскому языку для 4 класса. 5 детективных дел, памятка, подсказки и проверка ответов.">
+  <title>Падежный детектив • Умная среда</title>
+  <style>
+    :root {
+      --cream: #fff9ed;
+      --cream2: #fff1d5;
+      --ink: #173f28;
+      --violet: #33218e;
+      --violet2: #6334ba;
+      --lilac: #efe1ff;
+      --mint: #e8f6cf;
+      --green: #27733d;
+      --lime: #c4f170;
+      --yellow: #ffe28b;
+      --pink: #f7dcf9;
+      --card: rgba(255,255,255,.96);
+      --shadow: 0 12px 28px rgba(55, 38, 97, .10), 0 3px 9px rgba(55,38,97,.05);
+    }
+    * {box-sizing: border-box;}
+    html {scroll-behavior:smooth;}
+    body {
+      margin:0;
+      min-height:100vh;
+      font: 17px/1.4 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      color:#2b2442;
+      background:
+        radial-gradient(circle at 96% 10%, rgba(189,154,248,.25), transparent 19rem),
+        radial-gradient(circle at 0% 63%, rgba(189,225,135,.28), transparent 18rem),
+        linear-gradient(155deg,#fff9ed 0%,#fff6e8 60%,#fffdf5 100%);
+    }
+    button {font:inherit;cursor:pointer;}
+    button:focus-visible, a:focus-visible {outline:4px solid #ffb42a;outline-offset:3px;}
+    button:disabled {cursor:default;}
+    .shell {width:min(100% - 28px, 760px);margin:0 auto;padding:22px 0 32px;position:relative;}
+    .brand {display:flex;justify-content:center;margin-bottom:18px;}
+    .brand__pill {
+      display:inline-flex;align-items:center;gap:13px;
+      color:white;background:linear-gradient(115deg,#17247b,#4521aa 75%,#241682);
+      border-radius:26px 26px 26px 9px;padding:13px 25px;
+      box-shadow:0 8px 20px rgba(45,35,126,.21);font-weight:850;font-size:clamp(20px,4.5vw,30px);
+      letter-spacing:-.04em;
+    }
+    .brand__icon {width:31px;height:31px;flex:0 0 auto;}
+    .leaf {position:absolute;opacity:.32;pointer-events:none;font-size:34px;}
+    .leaf.one {left:-9px;top:72px;transform:rotate(-20deg);}
+    .leaf.two {right:1px;top:202px;transform:rotate(20deg);}
+    .screen {display:none;animation:appear .27s ease both;}
+    .screen.active{display:block;}
+    @keyframes appear {from{opacity:0;transform:translateY(7px);}to{opacity:1;transform:translateY(0);}}
+    .paper {border:2px solid #fff;background:var(--card);box-shadow:var(--shadow);border-radius:32px;padding:clamp(20px,5vw,37px);}
+    .center {text-align:center;}
+    h1,h2,h3,p {margin-top:0;}
+    h1 {color:var(--ink);font-weight:900;font-size:clamp(33px,7.8vw,55px);line-height:1.1;letter-spacing:-.045em;margin-bottom:12px;}
+    h2 {color:var(--ink);font-size:clamp(27px,6.3vw,39px);line-height:1.15;letter-spacing:-.035em;margin-bottom:14px;}
+    h3 {color:var(--violet);font-size:20px;margin:0 0 8px;}
+    .eyebrow {display:inline-block;border-radius:100px;background:var(--lilac);color:var(--violet);padding:7px 15px;font-weight:800;margin-bottom:16px;font-size:15px;}
+    .lead {font-size:clamp(16px,3.65vw,19px);margin-bottom:20px;}
+    .hero {display:grid;grid-template-columns:minmax(180px, .8fr) 1.2fr;gap:22px;align-items:center;}
+    .mascot {width:100%;max-width:260px;margin:auto;display:block;filter:drop-shadow(0 10px 6px rgba(36,39,65,.08));}
+    .btn {display:inline-flex;justify-content:center;align-items:center;gap:8px;background:linear-gradient(120deg,#3c23a4,#5427b8);border:0;color:white;border-radius:17px;padding:15px 23px;font-weight:850;min-height:54px;box-shadow:0 6px 0 #25156b;transition:transform .1s, box-shadow .1s;}
+    .btn:hover {filter:brightness(1.06);}
+    .btn:active {transform:translateY(4px);box-shadow:0 2px 0 #25156b;}
+    .btn.secondary {color:#39267c;background:#efe5ff;box-shadow:0 5px 0 #ddc7fa;}
+    .btn.green {background:linear-gradient(120deg,#246c38,#36834c);box-shadow:0 6px 0 #164b27;}
+    .btnrow {display:flex;flex-wrap:wrap;gap:13px;justify-content:center;margin-top:24px;}
+    .small-note{font-size:14px;color:#69617b;margin:17px 0 0;}
+    .ribbon {background:linear-gradient(90deg,#e4f6b7,#f8e0ff);border-radius:100px;padding:9px 17px;text-align:center;font-weight:800;color:var(--violet);margin:14px 0 20px;}
+    .steps {display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:16px 0 19px;}
+    .step {border-radius:20px;padding:15px;background:linear-gradient(145deg,#f5eaff,#fdfaff);border:2px solid #eee0ff;font-size:16px;}
+    .step:nth-child(even){background:linear-gradient(145deg,#f0f9d9,#fffdf5);border-color:#dff1bb;}
+    .step strong {display:inline-grid;place-items:center;width:30px;height:30px;border-radius:10px;background:var(--violet);color:white;margin-right:6px;}
+    .step:nth-child(even) strong {background:var(--green);}
+    .tip {border-left:6px solid #b2e457;background:#f2fbdc;border-radius:14px;padding:13px 16px;font-size:16px;margin:15px 0;}
+    .case-grid {display:grid;grid-template-columns:repeat(3, minmax(0,1fr));gap:8px;margin:14px 0;}
+    .case-info {font-size:14px;text-align:center;border-radius:12px;padding:9px 3px;background:#f7eaff;border:1px solid #ebd8ff;}
+    .case-info b {color:var(--violet);font-size:18px;display:block;}
+    .example {background:#fff5d7;border:2px dashed #eed183;border-radius:18px;padding:14px 17px;margin:18px 0 0;font-size:17px;}
+    .example .focusword {background:#f0dcff;}
+    .progress-top {display:flex;justify-content:space-between;gap:7px;align-items:center;font-size:14px;font-weight:800;color:var(--violet);margin-bottom:10px;}
+    .track {height:11px;background:#e8daf8;border-radius:99px;overflow:hidden;margin-bottom:18px;}
+    .track__fill {height:100%;width:0;background:linear-gradient(90deg,#7bc750,#b9eb76);border-radius:99px;transition:width .35s ease;}
+    .case-heading {font-size:clamp(23px,6vw,32px);color:var(--violet);line-height:1.1;font-weight:900;margin:0 0 10px;letter-spacing:-.03em;}
+    .prompt {font-size:16px;margin-bottom:16px;}
+    .sentence {
+      background:#fff9e4;border:2px solid #f3dfa4;border-radius:22px;
+      font-size:clamp(21px,5.15vw,31px);line-height:1.34;font-weight:750;color:#25332c;
+      padding:20px 15px;text-align:center;margin:0 0 15px;
+    }
+    .focusword {padding:0 3px;background:#e4ffd2;border-bottom:4px solid #5bbf55;border-radius:5px;color:#21492d;white-space:nowrap;}
+    .subquestion {font-weight:800;margin:18px 0 11px;color:#34276f;}
+    .options {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+    .choice {
+      border:2px solid #e2d7f4;border-radius:17px;padding:12px 9px;
+      background:linear-gradient(160deg,#fff,#f7f0ff);color:#392b77;font-weight:780;
+      min-height:57px;font-size:clamp(14px,3.1vw,17px);overflow-wrap:anywhere;
+    }
+    .choice:hover:not(:disabled) {border-color:#9981da;background:#f0e5ff;}
+    .choice:disabled:not(.chosen){opacity:.68;}
+    .choice.chosen {border-color:#58aa4d;background:#e2f5d9;color:#204b28;opacity:1;}
+    .choice.incorrect {border-color:#d0a6ea;background:#f7e8ff;color:#4d3283;}
+    .hint-toggle {display:block;width:100%;margin-top:16px;min-height:53px;border:2px solid #d9c7f3;background:#f5ecff;color:#442982;border-radius:16px;font-weight:800;padding:11px 16px;}
+    .hint-toggle:hover {background:#efe2ff;border-color:#b79be4;}
+    .hint-toggle[hidden] {display:none;}
+    .hint-toggle:disabled {opacity:.7;cursor:default;}
+    .hint-panel {display:none;margin-top:10px;padding:14px 16px;border:2px solid #e5d1f5;border-radius:16px;background:#fbf2ff;color:#4b3477;font-size:16px;line-height:1.45;}
+    .hint-panel.show {display:block;}
+    .feedback {margin-top:17px;padding:15px;border-radius:17px;font-size:16px;display:none;}
+    .feedback.show {display:block;}
+    .feedback.good {background:#e7f7d8;border:2px solid #b4df9b;color:#265634;}
+    .feedback.hint {background:#f6eaff;border:2px solid #e0bef4;color:#513077;}
+    .feedback strong {display:block;margin-bottom:3px;}
+    .nextbox {margin-top:19px;display:none;}
+    .nextbox.show {display:flex;justify-content:center;}
+    .score {font-size:clamp(26px,6.5vw,42px);font-weight:900;color:var(--violet);padding:15px;background:linear-gradient(100deg,#e6f7cd,#f0e1ff);border-radius:24px;margin:18px 0;}
+    .result-stats {display:grid;gap:11px;margin:16px 0 20px;text-align:left;}
+    .result-stat {border:2px solid #e6d9f6;border-radius:18px;padding:13px 16px;background:#f9f3ff;display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:16px;}
+    .result-stat:nth-child(2) {border-color:#e7edc8;background:#f5fadf;}
+    .result-stat strong {font-size:22px;font-weight:900;white-space:nowrap;color:var(--violet);}
+    .results-note {font-size:14px;color:#6d627b;margin:-8px 0 15px;}
+    .final-emoji {font-size:60px;line-height:1.25;}
+    .finaltext {font-size:18px;}
+    .footer {text-align:center;color:#685c7c;margin-top:24px;font-size:14px;padding:0 8px;}
+    .footer strong {color:var(--violet);}
+    .star {color:#d78b11;}
+    @media(max-width:570px){
+      .shell{width:min(100% - 22px,760px);padding-top:16px;}
+      .paper{border-radius:25px;padding:20px 16px;}
+      .hero{grid-template-columns:1fr;gap:8px;text-align:center;}
+      .mascot{max-width:170px;max-height:170px;}
+      .hero .btn{width:100%;}
+      .steps{grid-template-columns:1fr;gap:9px;}
+      .step{padding:12px;}
+      .case-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+      .brand__pill{padding:12px 19px;}
+      .btnrow{flex-direction:column;}
+      .btnrow .btn{width:100%;}
+    }
+    @media(max-width:350px){.options{grid-template-columns:1fr;}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto;}.screen{animation:none;}.track__fill{transition:none;}.btn{transition:none;}}
+    @media print {
+      body {background:white;}
+      .brand,.btnrow,.footer,.leaf {display:none!important;}
+      .screen {display:none!important;}
+      .screen.active {display:block!important;}
+      .paper {box-shadow:none;border:1px solid #ddd;}
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <div class="leaf one" aria-hidden="true">🍃</div><div class="leaf two" aria-hidden="true">✦</div>
+    <header class="brand">
+      <div class="brand__pill">
+        <svg class="brand__icon" role="img" aria-label="Лампочка" viewBox="0 0 36 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 5C10.5 5 6 10.5 6 16.5c0 5.2 3.2 7.6 6.3 10.6.8.8 1.2 1.7 1.3 2.9h8.7c.1-1.2.5-2.1 1.3-2.9 3.1-3 6.3-5.4 6.3-10.6C29.9 10.5 25.5 5 18 5Z" stroke="white" stroke-width="3"/>
+          <path d="M14.5 33h7M16 36h4M12 18l4 4 3-4 3 3 3-5" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Умная среда
+      </div>
+    </header>
+
+    <section id="welcome" class="screen active" aria-label="Приветствие">
+      <div class="paper hero">
+        <svg class="mascot" viewBox="0 0 270 264" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Весёлая лупа-детектив в шляпе">
+          <ellipse cx="136" cy="246" rx="84" ry="12" fill="#c8b0a4" opacity=".25"/>
+          <path d="M188 162l52 56q7 10-4 20t-19 2l-51-58" fill="#7e42b7" stroke="#4a2b89" stroke-width="8"/>
+          <circle cx="114" cy="117" r="73" fill="#ffdf78" stroke="#5d3fa9" stroke-width="11"/>
+          <circle cx="114" cy="117" r="56" fill="#fff3ad"/>
+          <path d="M51 60h120l-17-12-8-29H77L68 48Z" fill="#416e42" stroke="#28512d" stroke-width="5"/>
+          <rect x="39" y="49" width="137" height="16" rx="8" fill="#345e39"/>
+          <path d="M91 116q13-14 26 0M136 116q10-11 21-2" stroke="#3c2b59" stroke-width="6" stroke-linecap="round" fill="none"/>
+          <ellipse cx="97" cy="117" rx="6" ry="9" fill="#35255b"/><ellipse cx="146" cy="117" rx="6" ry="9" fill="#35255b"/>
+          <circle cx="80" cy="143" r="12" fill="#f5ab94" opacity=".7"/><circle cx="165" cy="143" r="12" fill="#f5ab94" opacity=".7"/>
+          <path d="M109 144q17 18 33-1" stroke="#553368" stroke-width="6" fill="none" stroke-linecap="round"/>
+          <path d="M50 176l-28 25M77 183l-8 37" stroke="#7350b5" stroke-width="8" stroke-linecap="round"/>
+          <path d="M13 190l32 7 15-3 5 24-26 7-23-14" fill="#caefa6" stroke="#6d9939" stroke-width="4"/>
+          <path d="M73 191l69 13-8 41-72-14Z" fill="#f5e9b9" stroke="#925fbe" stroke-width="5"/>
+          <path d="M80 211h44M77 222h35" stroke="#9f7eb4" stroke-width="3" stroke-linecap="round"/>
+          <path d="M91 17l14-14M184 29l12-14M200 90l17-3" stroke="#e8b638" stroke-width="5" stroke-linecap="round"/>
+          <path d="M211 48l6 8 9 2-7 6 1 10-9-5-8 4 1-9-7-6 10-2Z" fill="#f5bc55"/>
+        </svg>
+        <div>
+          <span class="eyebrow">🔎 Русский язык • 4 класс</span>
+          <h1>Падежный<br><span style="color:var(--violet)">детектив</span></h1>
+          <p class="lead">Перед тобой <strong>5 секретных дел</strong>. Найди падежи существительных, разгадай сложный случай и раскрой все тайны!</p>
+          <div class="ribbon">👀 Посмотри → 💡 Пойми → 🎮 Попробуй!</div>
+          <button class="btn" type="button" id="startBtn">Начать расследование →</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="memo" class="screen" aria-label="Памятка">
+      <div class="paper">
+        <span class="eyebrow">📖 Памятка детектива</span>
+        <h2>Как определить падеж?</h2>
+        <div class="steps">
+          <div class="step"><strong>1</strong> Найди нужное <b>существительное</b>.</div>
+          <div class="step"><strong>2</strong> Проверь, не является ли оно <b>подлежащим</b> — тогда это именительный падеж.</div>
+          <div class="step"><strong>3</strong> Если это не подлежащее, найди слово, от которого существительное зависит, и <b>поставь вопрос</b>.</div>
+          <div class="step"><strong>4</strong> Определи <b>падеж</b> по вопросу и смыслу.</div>
+        </div>
+        <h3>Шпаргалка: шесть падежей</h3>
+        <div class="case-grid" aria-label="Вопросы падежей">
+          <div class="case-info"><b>И. п.</b> кто? что?</div>
+          <div class="case-info"><b>Р. п.</b> кого? чего?</div>
+          <div class="case-info"><b>Д. п.</b> кому? чему?</div>
+          <div class="case-info"><b>В. п.</b> кого? что?</div>
+          <div class="case-info"><b>Т. п.</b> кем? чем?</div>
+          <div class="case-info"><b>П. п.</b> о ком? о чём?</div>
+        </div>
+        <div class="example"><b>Пример:</b> Мальчик подошёл <span class="focusword">к дому</span>.<br>
+          Подошёл <b>(к чему?)</b> к дому — <b>дательный падеж</b>.</div>
+        <div class="tip"><b>💡 Секрет детектива:</b> некоторые вопросы совпадают. Смотри на связь слов и смысл предложения, а не только на предлог или окончание.</div>
+        <div class="btnrow">
+          <button class="btn green" type="button" id="memoNext">Перейти к делам →</button>
+          <button class="btn secondary" type="button" id="memoBack">← На главную</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="practice" class="screen" aria-label="Детективные дела">
+      <div class="paper">
+        <div class="progress-top"><span id="progressText">Дело 1 из 5</span><span id="progressSymbol">🔎 Ищем улики</span></div>
+        <div class="track" role="progressbar" aria-label="Прогресс расследования" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0" id="track"><div id="trackFill" class="track__fill"></div></div>
+        <div class="case-heading" id="caseTitle"></div>
+        <p class="prompt" id="casePrompt"></p>
+        <div class="sentence" id="sentence"></div>
+        <div class="subquestion" id="question"></div>
+        <div class="options" id="options" role="group" aria-label="Выбери падеж"></div>
+        <button type="button" class="hint-toggle" id="hintToggle" aria-expanded="false" aria-controls="hintPanel">💡 Нужна подсказка?</button>
+        <div class="hint-panel" id="hintPanel" role="note"></div>
+        <div class="feedback" id="feedback" role="status" aria-live="polite"></div>
+        <div class="nextbox" id="nextbox"><button type="button" class="btn green" id="nextBtn">Следующее дело →</button></div>
+      </div>
+    </section>
+
+    <section id="final" class="screen" aria-label="Результат">
+      <div class="paper center">
+        <div class="final-emoji" aria-hidden="true">🏅🔎</div>
+        <span class="eyebrow">Расследование завершено!</span>
+        <h2>Все 5 дел раскрыты!</h2>
+        <p class="finaltext">Ты раскрыл все дела! Посмотрим, что получилось самостоятельно, а где пригодилась помощь.</p>
+        <div class="score" id="scoreText">0 из 6 — самостоятельно</div>
+        <div class="result-stats" aria-label="Итоги выполнения">
+          <div class="result-stat"><span>💡 С подсказкой</span><strong id="assistedText">0</strong></div>
+          <div class="result-stat"><span>🔄 После исправления без подсказки</span><strong id="correctedText">0</strong></div>
+        </div>
+        <p class="results-note">Самостоятельно — верно с первой попытки, без подсказки. Всего 6 ответов в 5 делах.</p>
+        <p class="finaltext" id="resultAdvice"></p>
+        <div class="tip" style="text-align:left">💡 <b>Помни:</b> если вопрос «кого?» подходит к двум падежам, обрати внимание на смысл предложения и связь слов.</div>
+        <div class="btnrow">
+          <button type="button" class="btn" id="restartBtn">🔄 Пройти ещё раз</button>
+          <button type="button" class="btn secondary" id="returnMemoBtn">📖 Посмотреть памятку</button>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">💜 Материал подготовила: <strong>Елена Владимировна</strong> · Онлайн-репетитор · Начальные классы<br>Игра не собирает и не передаёт личные данные.</footer>
+  </main>
+  <script>
+    (() => {
+      'use strict';
+      const cases = [
+        {
+          title: 'Дело № 1. «Кто главный?»',
+          prompt: 'Определи падеж выделенного слова.',
+          sentence: 'На ветке сидит <mark>синица</mark>.',
+          parts: [{
+            question: 'В каком падеже слово «синица»?',
+            answer: 'Именительный',
+            hints: [
+              'Каким членом предложения является слово «синица»? В каком падеже стоит подлежащее?',
+              'Найди главные члены предложения. Подлежащее называет того, о ком говорится, и отвечает на вопрос «кто?» или «что?».'
+            ],
+            explanation: 'Синица — подлежащее. Оно отвечает на вопрос «кто?» и стоит в именительном падеже.'
+          }]
+        },
+        {
+          title: 'Дело № 2. «Кому помогают?»',
+          prompt: 'Найди слово, от которого задаём вопрос.',
+          sentence: 'Девочка помогает <mark>маме</mark>.',
+          parts: [{
+            question: 'В каком падеже слово «маме»?',
+            answer: 'Дательный',
+            hints: [
+              'Найди слово, от которого зависит «маме». Помогает кому?',
+              'Сравни вопрос «кому?» с вопросами падежей, которые ты уже изучил.'
+            ],
+            explanation: 'Помогает (кому?) маме — дательный падеж.'
+          }]
+        },
+        {
+          title: 'Дело № 3. «Найди инструмент»',
+          prompt: 'Внимательно прочитай предложение.',
+          sentence: 'Мальчик рисует <mark>карандашом</mark>.',
+          parts: [{
+            question: 'В каком падеже слово «карандашом»?',
+            answer: 'Творительный',
+            hints: [
+              'Каким словом обозначен предмет, с помощью которого рисуют? Поставь вопрос.',
+              'Найди связь слов: рисует (чем?) карандашом. Вспомни, какой падеж отвечает на вопрос «чем?».'
+            ],
+            explanation: 'Рисует (чем?) карандашом — творительный падеж.'
+          }]
+        },
+        {
+          title: 'Дело № 4. «О чём разговор?»',
+          prompt: 'Найди падеж по вопросу и смыслу.',
+          sentence: 'Дети говорили <mark>о космосе</mark>.',
+          parts: [{
+            question: 'В каком падеже слово «космосе»?',
+            answer: 'Предложный',
+            hints: [
+              'Найди слово, от которого зависит «космосе». Говорили о чём?',
+              'Подумай, на вопрос какого падежа отвечает сочетание «о чём?».'
+            ],
+            explanation: 'Говорили (о чём?) о космосе — предложный падеж.'
+          }]
+        },
+        {
+          title: 'Дело № 5. «Одинаковые вопросы»',
+          prompt: 'Одинаковая форма слова — разные падежи. Раскрой два секрета!',
+          sentence: '',
+          parts: [
+            {
+              sentence: 'У Маши нет <mark>брата</mark>.',
+              question: 'Улика А. В каком падеже слово «брата»?',
+              answer: 'Родительный',
+              hints: [
+                'Сравни предложения. Какое слово связано с «брата» в каждом случае?',
+                'В первом предложении: нет (кого?) брата. Во втором: встретила (кого?) брата. Какое значение у сочетания «нет брата»?'
+              ],
+              explanation: 'Нет (кого?) брата — родительный падеж. После слова «нет» существительное в таком сочетании стоит в родительном падеже.'
+            },
+            {
+              sentence: 'Маша встретила <mark>брата</mark>.',
+              question: 'Улика Б. В каком падеже слово «брата»?',
+              answer: 'Винительный',
+              hints: [
+                'Сравни предложения. Какое слово связано с «брата» в каждом случае?',
+                'В предложении «Маша встретила брата» действие направлено на брата. Сравни: «Маша встретила сестру».'
+              ],
+              explanation: 'Встретила (кого?) брата — винительный падеж. Здесь существительное обозначает того, на кого направлено действие.'
+            }
+          ]
+        }
+      ];
+      const names = ['Именительный','Родительный','Дательный','Винительный','Творительный','Предложный'];
+      const $ = id => document.getElementById(id);
+      const sections = ['welcome','memo','practice','final'];
+      let caseIndex=0, partIndex=0, independent=0, assisted=0, corrected=0, attempts=0, hintUsed=false, returningFromFinal=false, currentDone=false;
+      const totalAnswers = cases.reduce((n, c) => n+c.parts.length, 0);
+
+      function show(screen) {
+        sections.forEach(name => $(name).classList.toggle('active', name===screen));
+        window.scrollTo({top:0, behavior:'instant'});
+        const header = $(screen).querySelector('h1,h2,.case-heading');
+        if (header && screen!=='practice') {
+          header.setAttribute('tabindex','-1');
+          header.focus({preventScroll:true});
+        }
+      }
+      function safeSentence(str) {return str.replaceAll('<mark>', '<span class="focusword">').replaceAll('</mark>','</span>');}
+      function startNew() {caseIndex=0;partIndex=0;independent=0;assisted=0;corrected=0;attempts=0;hintUsed=false;currentDone=false;returningFromFinal=false;renderCase();show('practice');}
+      function renderCase() {
+        currentDone=false; attempts=0; hintUsed=false;
+        const data=cases[caseIndex], part=data.parts[partIndex];
+        $('progressText').textContent=`Дело ${caseIndex+1} из ${cases.length}`;
+        $('progressSymbol').textContent=data.parts.length>1?`Улика ${partIndex+1} из ${data.parts.length}`:'🔎 Ищем улики';
+        $('track').setAttribute('aria-valuenow',String(caseIndex));
+        $('trackFill').style.width=`${caseIndex/cases.length*100}%`;
+        $('caseTitle').textContent=data.title;
+        $('casePrompt').textContent=data.prompt;
+        $('sentence').innerHTML=safeSentence(part.sentence || data.sentence);
+        $('question').textContent=part.question;
+        $('feedback').className='feedback';$('feedback').textContent='';
+        $('hintPanel').textContent='';$('hintPanel').className='hint-panel';
+        $('hintToggle').disabled=false;$('hintToggle').hidden=false;
+        $('hintToggle').textContent='💡 Нужна подсказка?';$('hintToggle').setAttribute('aria-expanded','false');
+        $('nextbox').className='nextbox';
+        $('nextBtn').textContent = partIndex<data.parts.length-1 ? 'Следующая улика →' : caseIndex===cases.length-1 ? 'Завершить расследование →' : 'Следующее дело →';
+        const box=$('options');box.replaceChildren();
+        names.forEach(name => {
+          const btn=document.createElement('button');
+          btn.type='button';btn.className='choice';btn.textContent=name;
+          btn.addEventListener('click',()=>check(name, btn));box.append(btn);
+        });
+      }
+      function check(name, btn) {
+        if(currentDone) return;
+        const part=cases[caseIndex].parts[partIndex];
+        attempts++;
+        const feedback=$('feedback');
+        feedback.replaceChildren();
+        const heading=document.createElement('strong');
+        const body=document.createElement('span');
+        if(name===part.answer){
+          // Каждый ответ учитывается ровно в одной категории.
+          // Даже если ребёнок закрыл подсказку, факт её просмотра сохраняется.
+          if(hintUsed) assisted++;
+          else if(attempts===1) independent++;
+          else corrected++;
+          currentDone=true;
+          heading.textContent=hintUsed ? '✅ Верно! Подсказка помогла!' : attempts===1 ? '✅ Дело раскрыто самостоятельно!' : '✅ Дело раскрыто после исправления!';
+          body.textContent=part.explanation;
+          feedback.className='feedback good show';
+          [...$('options').children].forEach(opt => {opt.disabled=true;if(opt===btn)opt.classList.add('chosen');opt.classList.remove('incorrect');});
+          $('nextbox').className='nextbox show';
+          $('hintPanel').className='hint-panel';$('hintToggle').hidden=true;
+        } else {
+          heading.textContent='🔎 Ещё одна попытка!';
+          body.textContent='Внимательно проверь связь слов и вопрос. Если нужна помощь, открой подсказку.';
+          feedback.className='feedback hint show';
+          if($('hintPanel').classList.contains('show')) {
+            $('hintPanel').textContent=part.hints[Math.min(Math.max(attempts-1,0), part.hints.length-1)];
+          }
+          [...$('options').children].forEach(opt=>opt.classList.remove('incorrect'));
+          btn.classList.add('incorrect');
+        }
+        feedback.append(heading,body);
+      }
+      function goNext(){
+        if(!currentDone)return;
+        const current=cases[caseIndex];
+        if(partIndex<current.parts.length-1){partIndex++;renderCase();}
+        else if(caseIndex<cases.length-1){caseIndex++;partIndex=0;renderCase();}
+        else {showFinal();return;}
+        $('caseTitle').setAttribute('tabindex','-1');$('caseTitle').focus({preventScroll:true});
+        window.scrollTo({top:0,behavior:'smooth'});
+      }
+      function showFinal(){
+        $('scoreText').textContent=`${independent} из ${totalAnswers} — самостоятельно`;
+        $('assistedText').textContent=String(assisted);
+        $('correctedText').textContent=String(corrected);
+        $('resultAdvice').textContent = independent===totalAnswers
+          ? '🌟 Все ответы верны с первой попытки, без подсказок! Ты отличный падежный детектив!'
+          : assisted>0
+          ? '💜 Отличная работа! Подсказки помогают учиться. При следующем прохождении попробуй раскрыть больше дел самостоятельно.'
+          : '🌟 Ты раскрыл все дела! При повторном прохождении попробуй сразу определить падеж по смыслу и связи слов.';
+        $('trackFill').style.width='100%';$('track').setAttribute('aria-valuenow','5');
+        show('final');
+      }
+      $('startBtn').addEventListener('click',()=>{returningFromFinal=false;show('memo');});
+      $('memoNext').addEventListener('click',()=>{if(returningFromFinal){returningFromFinal=false;show('final');}else startNew();});
+      $('memoBack').addEventListener('click',()=>{returningFromFinal=false;show('welcome');});
+      $('nextBtn').addEventListener('click',goNext);
+      $('hintToggle').addEventListener('click',()=>{
+        if(currentDone)return;
+        const panel=$('hintPanel'), toggle=$('hintToggle');
+        const opening=!panel.classList.contains('show');
+        if(opening){
+          hintUsed=true;
+          const part=cases[caseIndex].parts[partIndex];
+          panel.textContent=part.hints[Math.min(Math.max(attempts-1,0),part.hints.length-1)];
+        }
+        panel.classList.toggle('show',opening);
+        toggle.textContent=opening?'💡 Скрыть подсказку':'💡 Нужна подсказка?';
+        toggle.setAttribute('aria-expanded',String(opening));
+      });
+      $('restartBtn').addEventListener('click',()=>{returningFromFinal=false;show('memo');});
+      $('returnMemoBtn').addEventListener('click',()=>{returningFromFinal=true;$('memoNext').textContent='Вернуться к результату →';show('memo');});
+      // При новом заходе в памятку возвращаем исходную надпись основной кнопки.
+      $('startBtn').addEventListener('click',()=>{$('memoNext').textContent='Перейти к делам →';});
+      $('restartBtn').addEventListener('click',()=>{$('memoNext').textContent='Начать новое расследование →';});
+    })();
+  </script>
+</body>
+</html>
